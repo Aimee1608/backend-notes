@@ -1,0 +1,14 @@
+{
+  "name": "jwt-oauth-demo",
+  "version": "1.0.0",
+  "description": "Minimal JWT + OAuth2 auth demo: access/refresh tokens, refresh + rotation, scope checks",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
