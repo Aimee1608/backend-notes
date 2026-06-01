@@ -94,10 +94,18 @@ app.post('/refresh', (req, res) => {
 // --- 5. 服务间 token(OAuth2 client_credentials)------------------------
 // 没有用户参与:一个服务用 client_id + client_secret 证明自己身份,
 // 拿到一个限定其可调用范围的 token。
-const SERVICE_CLIENTS = { 'svc-reporting': 'secret-abc' };
+//
+// ⚠️ 以下是简化演示,真实环境的区别:
+//   1) client_id / client_secret 不是硬编码,而是在授权服务器「注册应用」时分配
+//      (client_id 公开标识;client_secret 是高熵随机串、机密,通常只显示一次)。
+//   2) 服务端存 secret 的 hash(像用户密码),验证时 hash 比对,而非明文相等。
+//   3) secret 从环境变量 / 密钥管理(KMS、Vault)读取,绝不硬编码、绝不进 git。
+//   4) 标准传法是 HTTP Basic 头 `Authorization: Basic base64(id:secret)`,这里用 body 仅为简化。
+const SERVICE_CLIENTS = { 'svc-reporting': 'secret-abc' }; // 仅 demo,真实环境别这样
 app.post('/token', (req, res) => {
   const { client_id: clientId, client_secret: clientSecret, grant_type: grantType } = req.body || {};
   if (grantType !== 'client_credentials') return res.status(400).json({ error: 'unsupported_grant_type' });
+  // 简化:明文字符串比对;生产应为 hash 比对(如 bcrypt.compare)。
   if (SERVICE_CLIENTS[clientId] !== clientSecret) return res.status(401).json({ error: 'invalid_client' });
   const accessToken = signAccessToken({ sub: clientId, scope: 'service:read' });
   res.json({ token_type: 'Bearer', access_token: accessToken });
