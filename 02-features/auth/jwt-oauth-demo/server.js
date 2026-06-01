@@ -1,14 +1,13 @@
 'use strict';
 
-// A minimal auth server showing the pieces behind "log in once, then keep
-// calling APIs without logging in again":
-//   POST /login    -> exchange credentials for access + refresh tokens
-//   GET  /profile  -> protected resource, needs a valid access token
-//   GET  /admin    -> protected AND needs the "admin" scope (authorization)
-//   POST /refresh  -> swap a refresh token for a fresh access token (+ rotation)
-//   POST /token    -> service-to-service token (OAuth2 client_credentials)
+// 一个最小的鉴权服务,演示"登录一次、之后不用反复登录"背后的几块拼图:
+//   POST /login    -> 用账号密码换 access + refresh token
+//   GET  /profile  -> 受保护资源,需要有效的 access token
+//   GET  /admin    -> 受保护 且 需要 "admin" scope(授权)
+//   POST /refresh  -> 用 refresh token 换新的 access token(并轮转)
+//   POST /token    -> 服务间鉴权(OAuth2 client_credentials)
 //
-// Everything here is the public OAuth 2.0 / JWT standard. Nothing proprietary.
+// 这里全部是公开的 OAuth 2.0 / JWT 标准,无任何专有内容。
 
 const express = require('express');
 const {
@@ -22,13 +21,13 @@ const { findUser, findUserById, refreshAllowList } = require('./store');
 const app = express();
 app.use(express.json());
 
-// --- 1. Login: credentials -> tokens -------------------------------------
+// --- 1. 登录:凭证 -> token ----------------------------------------------
 app.post('/login', (req, res) => {
   const { username, password } = req.body || {};
   const user = findUser(username, password);
   if (!user) return res.status(401).json({ error: 'invalid_credentials' });
 
-  // The access token carries identity (sub) + what they may do (scope).
+  // access token 携带身份(sub)和能做什么(scope)。
   const accessToken = signAccessToken({ sub: user.id, scope: user.scopes.join(' ') });
   const refreshToken = signRefreshToken({ sub: user.id });
   refreshAllowList.add(refreshToken);
@@ -36,7 +35,7 @@ app.post('/login', (req, res) => {
   res.json({ token_type: 'Bearer', access_token: accessToken, refresh_token: refreshToken });
 });
 
-// --- Middleware: require a valid access token ----------------------------
+// --- 中间件:要求有效的 access token -------------------------------------
 function requireAuth(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
@@ -45,12 +44,12 @@ function requireAuth(req, res, next) {
     req.user = verifyAccessToken(token); // { sub, scope, iat, exp }
     next();
   } catch (err) {
-    // Expired or tampered -> 401. The client should call /refresh, then retry.
+    // 过期或被篡改 -> 401。客户端应去 /refresh 换新的,再重试。
     return res.status(401).json({ error: 'invalid_token', reason: err.message });
   }
 }
 
-// --- Middleware: require a specific scope (authorization, not authentication)
+// --- 中间件:要求特定 scope(授权,而非认证)-----------------------------
 function requireScope(scope) {
   return (req, res, next) => {
     const scopes = (req.user.scope || '').split(' ');
@@ -59,18 +58,18 @@ function requireScope(scope) {
   };
 }
 
-// --- 2. Protected resource ----------------------------------------------
+// --- 2. 受保护资源 ------------------------------------------------------
 app.get('/profile', requireAuth, (req, res) => {
   const user = findUserById(req.user.sub);
   res.json({ id: user.id, username: user.username, scopes: user.scopes });
 });
 
-// --- 3. Protected AND scope-gated ---------------------------------------
+// --- 3. 受保护 且 需要 scope(认证 vs 授权)-----------------------------
 app.get('/admin', requireAuth, requireScope('admin'), (req, res) => {
   res.json({ ok: true, message: 'welcome to the admin area' });
 });
 
-// --- 4. Refresh: swap a refresh token for a new access token -------------
+// --- 4. 刷新:用 refresh token 换新的 access token -----------------------
 app.post('/refresh', (req, res) => {
   const { refresh_token: refreshToken } = req.body || {};
   if (!refreshToken || !refreshAllowList.has(refreshToken)) {
@@ -79,9 +78,9 @@ app.post('/refresh', (req, res) => {
   try {
     const payload = verifyRefreshToken(refreshToken);
     const user = findUserById(payload.sub);
-    // Rotation: invalidate the old refresh token and issue a new pair. This
-    // limits damage if a refresh token leaks, and underpins "sliding" sessions
-    // (stay logged in while active; re-auth only after a long idle period).
+    // 轮转:作废旧的 refresh token,签发新的一对。这样万一 refresh token
+    // 泄露,损失也有限;这也是"滑动会话"的基础(活跃就一直在线,
+    // 长时间不操作才要求重新登录)。
     refreshAllowList.delete(refreshToken);
     const newAccess = signAccessToken({ sub: user.id, scope: user.scopes.join(' ') });
     const newRefresh = signRefreshToken({ sub: user.id });
@@ -92,9 +91,9 @@ app.post('/refresh', (req, res) => {
   }
 });
 
-// --- 5. Service-to-service token (OAuth2 client_credentials) -------------
-// No user involved: a service proves itself with client_id + client_secret and
-// gets a token scoped to what that service is allowed to call.
+// --- 5. 服务间 token(OAuth2 client_credentials)------------------------
+// 没有用户参与:一个服务用 client_id + client_secret 证明自己身份,
+// 拿到一个限定其可调用范围的 token。
 const SERVICE_CLIENTS = { 'svc-reporting': 'secret-abc' };
 app.post('/token', (req, res) => {
   const { client_id: clientId, client_secret: clientSecret, grant_type: grantType } = req.body || {};

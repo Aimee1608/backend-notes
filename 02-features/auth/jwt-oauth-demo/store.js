@@ -1,16 +1,16 @@
 'use strict';
 
-// Toy in-memory data. A real app uses a database for users and a fast store
-// (e.g. Redis) for the refresh-token allow-list so tokens can be revoked.
+// 玩具级的内存数据。真实应用会用数据库存用户,用快存储(如 Redis)
+// 存 refresh token 的白名单,这样 token 才能被吊销。
 
-// Demo users. Passwords would be hashed (bcrypt/argon2) in production.
+// 演示用户。生产环境密码必须哈希(bcrypt/argon2)后存储。
 const users = [
   { id: 'u_1001', username: 'alice', password: 'password123', scopes: ['profile', 'admin'] },
   { id: 'u_1002', username: 'bob', password: 'password123', scopes: ['profile'] },
 ];
 
-// Allow-list of currently valid refresh tokens. Keeping it lets us revoke a
-// refresh token on logout or rotate it on every refresh.
+// 当前有效的 refresh token 白名单。存一份,才能在登出时吊销、
+// 或在每次刷新时轮转。
 const refreshAllowList = new Set();
 
 function findUser(username, password) {
