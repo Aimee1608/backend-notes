@@ -1,0 +1,10 @@
+{
+  "name": "caching-demo",
+  "version": "1.0.0",
+  "description": "缓存经典问题与防护的零依赖演示:Cache-Aside、穿透、击穿、雪崩、一致性",
+  "main": "demo.js",
+  "scripts": {
+    "start": "node demo.js"
+  },
+  "license": "MIT"
+}
