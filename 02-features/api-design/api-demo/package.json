@@ -1,0 +1,10 @@
+{
+  "name": "api-design-demo",
+  "version": "1.0.0",
+  "description": "好接口长什么样的零依赖演示:幂等、分页(offset vs 游标)、统一错误结构",
+  "main": "demo.js",
+  "scripts": {
+    "start": "node demo.js"
+  },
+  "license": "MIT"
+}
