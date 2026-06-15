@@ -1,0 +1,10 @@
+{
+  "name": "cost-demo",
+  "version": "1.0.0",
+  "description": "服务月成本估算器:计算/存储/流量/数据库/缓存/日志各项相加,算出一个月烧多少钱(单价均为示例值)",
+  "main": "demo.js",
+  "scripts": {
+    "start": "node demo.js"
+  },
+  "license": "MIT"
+}

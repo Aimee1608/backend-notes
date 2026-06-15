@@ -1,0 +1,10 @@
+{
+  "name": "obs-demo",
+  "version": "1.0.0",
+  "description": "可观测性三大支柱的零依赖演示:Metrics(RED + Prometheus 格式)、结构化日志、Tracing span 树",
+  "main": "demo.js",
+  "scripts": {
+    "start": "node demo.js"
+  },
+  "license": "MIT"
+}
