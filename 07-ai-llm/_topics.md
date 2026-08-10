@@ -7,6 +7,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 发布合集：研发都要懂的事
 
 写作纪律：
+- **纯知识点扫盲，不写 demo 代码**：讲概念、讲链路、讲决策，用文字和链路图说清楚，不放代码块（个别地方一小段 JSON 结构示意可以，但不写可运行代码）
 - 涉及具体模型参数 / 价格 / 生态现状的篇目，动笔前先 WebSearch 核实当前状态（标 🔍）
 - 原理性内容（token、采样、向量、agent loop）不依赖时效，直接写
 - 不评价模型好坏，只给决策框架和查证渠道
@@ -31,7 +32,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 
 | # | 文件 | 核心问题 | 讲什么 | 时效 |
 |---|------|---------|-------|------|
-| 04 | 04-api-messages.md | 怎么调 API，messages 结构长什么样 | system/user/assistant 角色、多轮对话全量带历史、推理模型响应里的 thinking 块是什么、一个完整请求响应示例 | |
+| 04 | 04-api-messages.md | 怎么调 API，messages 结构长什么样 | system/user/assistant 角色、多轮对话全量带历史、推理模型响应里的 thinking 块是什么、请求响应的结构示意 | |
 | 05 | 05-token-billing.md | Token 计费：输入、输出、思考、缓存，四种价 | BPE 分词原理、中英文差异、输出比输入贵、thinking token 算输出、cache 写入/读取的价格差——**账单结构比三年前复杂得多** | 🔍 |
 | 06 | 06-context-window.md | 上下文都 1M 了，还会有什么问题 | 窗口大≠全都记得清：中间内容遗忘（lost in the middle）、长输入的成本放大、注意力稀释；为什么"全塞进去"依然不是万能解 | |
 | 07 | 07-streaming-batch.md | 流式、异步、批量：三种调用模式怎么选 | SSE 流式（实时对话）、异步任务（长时 agent）、Batch API（半价跑离线任务）；按场景选模式 | 🔍 |
@@ -73,7 +74,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 | 16 | 16-what-is-agent.md | Agent 到底是什么：从"聊天"到"干活" | 定义：模型在循环里自主调工具直到任务完成；和普通问答/工作流的本质区别（谁掌握控制流）；一个"查天气写日程"例子的完整链路图 | |
 | 17 | 17-tool-calling.md | 工具调用数据流：模型怎么"调"你的接口 | Tool schema 定义、模型返回的是"调用意图"不是执行、后端执行后回传、模型基于结果继续；**模型没有手，你的代码才是手**——这个数据流是一切 Agent 的地基 | |
 | 18 | 18-agent-loop.md | Agent Loop：循环怎么设计，怎么不失控 | 现代 agent 循环（在 ReAct 基础上的演进）、终止条件、最大步数、工具失败的恢复、并行工具调用；死循环和跑偏的真实案例 | |
-| 19 | 19-mcp.md | MCP：工具生态的 USB 接口 | 协议设计（Server 暴露 tools/resources/prompts）、为什么统一标准让工具生态爆发、自己写一个 MCP Server 有多简单、和 Function Calling 的层次关系 | 🔍 |
+| 19 | 19-mcp.md | MCP：工具生态的 USB 接口 | 协议设计（Server 暴露 tools/resources/prompts）、为什么统一标准让工具生态爆发、和 Function Calling 的层次关系 | 🔍 |
 | 20 | 20-agent-memory.md | 长任务和多轮对话：Agent 的记忆怎么管 | Context 会满：压缩/摘要、外部记忆（文件、TODO list）、跨会话记忆；长时任务的断点续跑设计 | |
 | 21 | 21-coding-computer-use.md | Coding Agent 和 Computer Use：落地最深的两个形态 | 为什么写代码是 agent 最成熟的场景（反馈闭环：跑测试就知道对错）；Computer Use（模型操作 GUI）的现状与边界 | 🔍 |
 
