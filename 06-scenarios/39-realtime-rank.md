@@ -1,10 +1,10 @@
-# 你以为热榜就是 ORDER BY，做完才发现是另一回事
+# 实时热榜怎么设计：Redis ZSet 与热度分值
 
 接到需求：展示实时热榜，按热度降序，支持分页，每分钟刷新。
 
 第一反应：`SELECT id, score FROM post ORDER BY score DESC LIMIT 20`，不就完了？
 
-上线之后，这条 SQL 成了最慢的查询，P99 超过 3 秒，CPU 飙高。
+但数据量和并发一上来，这条 SQL 很容易变成全站最慢的查询之一。
 
 ---
 
