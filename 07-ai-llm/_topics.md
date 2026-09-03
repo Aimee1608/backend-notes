@@ -4,13 +4,35 @@
 以 2026 年的技术形态为基准：推理模型是默认选项、Agent 是主流形态、长上下文是标配、
 RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清楚"现在该怎么做、为什么"。
 
-发布合集：研发都要懂的事
+发布合集：研发都要懂的事（公众号「Aimee写代码」）
 
 写作纪律：
 - **纯知识点扫盲，不写 demo 代码**：讲概念、讲链路、讲决策，用文字和链路图说清楚，不放代码块（个别地方一小段 JSON 结构示意可以，但不写可运行代码）
 - 涉及具体模型参数 / 价格 / 生态现状的篇目，动笔前先 WebSearch 核实当前状态（标 🔍）
 - 原理性内容（token、采样、向量、agent loop）不依赖时效，直接写
 - 不评价模型好坏，只给决策框架和查证渠道
+- **标题/开头禁虚构事件叙述**（公众号误导红线）：用「问题+方案」框架，不写具体金额/伪真实细节
+
+---
+
+## 📊 进度看板（每次开工先读这里）
+
+**已写已发布（草稿）：01–08**（第零章 3 篇 + 第一章关键词扫盲 5 篇）。已做技术核查，型号更新到 2026-08 最新。
+**下一篇：09**，从第二章「调用基础」开始。
+
+**每篇必带「文末答题」**（互动栏目，从 01 开始已固化）：
+- 栏目名三个换着用：「反直觉一问」「三秒判断题」「AI 冷知识小测」——按题目气质挑
+- 题型：认知纠正/判断题为主，每 4–5 篇穿插一道「站队调研题」（无标准答案，问"你们线上用哪种"）
+- **答案链**：每篇开头先揭晓上一篇的答案，本篇答案留到下一篇开头公布。写 09 时开头要先揭晓 08 的答案（08 答案是 B）
+- 格式：文末用 `---` 分隔，`**🎯 栏目名**` 起头，A/B/C 选项，末句引导"评论区打出答案，下一篇揭晓"
+
+**发布流程**（发公众号草稿）：
+1. 用户在 Mac 起：专用 Chrome（`--remote-debugging-port=9223 --user-data-dir=$HOME/.wxmp-chrome`）+ 反向隧道（`ssh -N -R 19222:127.0.0.1:9223 jiangqian.8@10.37.127.91`）
+2. 脚本：`~/.remote-browser/wxmp-publisher/wx-post.js`，`CDP_URL=http://127.0.0.1:19222 node wx-post.js --md <文件> --title <标题> --series ai --index <N> --save`
+3. 分批发（每批 4 篇），发完看 BODY_FILL 的 len 确认正文非空（曾出现空稿 bug，已修）
+4. 博客同步（可选）：文章存 ECS mongo（`ssh -fN -L 27018:127.0.0.1:27017 myblog`，库 aimeeblog，集合 article），发「分享镜」分类
+
+**已发布的不回改**（标题发布后改不了，重发会重复）。仓库改动照常 commit + push。
 
 ---
 
@@ -20,9 +42,9 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 
 | # | 文件 | 核心问题 | 讲什么 | 时效 |
 |---|------|---------|-------|------|
-| 01 | 01-llm-2026.md | 现在的 LLM 是什么：会思考、会看图、会干活 | 三个能力维度：推理（thinking）/ 多模态（原生图音视频）/ Agentic（自主调工具干活）；自回归生成的本质没变，变的是围绕它长出来的能力 | 🔍 |
-| 02 | 02-reasoning-mode.md | 推理模型和普通模式，什么时候让模型"想久一点" | Extended thinking / 慢思考的原理、思考 token 也计费、什么任务值得开（数学/规划/代码架构）、什么任务纯浪费（改写/抽取/闲聊） | 🔍 |
-| 03 | 03-model-landscape.md | 模型市场怎么看：参数怎么读、去哪查 | 上下文窗口 / 输入输出定价 / 缓存价格 / 能力标签（thinking、vision、computer use）怎么读；官方定价页 + 第三方对比站；**不写死任何数字，教查证方法** | 🔍 |
+| 01 ✅| 01-llm-2026.md | 现在的 LLM 是什么：会思考、会看图、会干活 | 三个能力维度：推理（thinking）/ 多模态（原生图音视频）/ Agentic（自主调工具干活）；自回归生成的本质没变，变的是围绕它长出来的能力 | 🔍 |
+| 02 ✅| 02-reasoning-mode.md | 推理模型和普通模式，什么时候让模型"想久一点" | Extended thinking / 慢思考的原理、思考 token 也计费、什么任务值得开（数学/规划/代码架构）、什么任务纯浪费（改写/抽取/闲聊） | 🔍 |
+| 03 ✅| 03-model-landscape.md | 模型市场怎么看：参数怎么读、去哪查 | 上下文窗口 / 输入输出定价 / 缓存价格 / 能力标签（thinking、vision、computer use）怎么读；官方定价页 + 第三方对比站；**不写死任何数字，教查证方法** | 🔍 |
 
 ---
 
@@ -32,11 +54,11 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 
 | # | 文件 | 核心问题 | 覆盖词汇 | 时效 |
 |---|------|---------|---------|------|
-| 04 | 04-glossary-model-spec.md | 模型规格词：新模型发布公告里的参数都什么意思 | 7B/405B（参数量级）、Dense vs MoE（混合专家）、激活参数、蒸馏（Distillation）、量化（INT8/FP4）、开源权重 vs 闭源、Base 模型 vs Instruct 模型 | 🔍 |
-| 05 | 05-glossary-training.md | 训练流程词：一个模型是怎么"炼"出来的 | 预训练（Pretraining）、后训练（Post-training）、SFT（监督微调）、RLHF / DPO（人类偏好对齐）、对齐（Alignment）、微调（Fine-tuning）、LoRA——用一条流水线把所有词串起来 | |
-| 06 | 06-glossary-inference.md | 推理采样词：模型生成一个字的背后 | Logits、Temperature、Top-p / Top-k、贪心解码、Max tokens、Stop sequence、KV Cache、投机采样（Speculative Decoding）——为什么同一个问题每次答案不一样，从这组词里找答案 | |
-| 07 | 07-glossary-eval.md | 能力评测词：跑分怎么看，为什么跑分高体感差 | Zero-shot / Few-shot、In-context Learning、涌现能力、Benchmark 怎么读（MMLU / SWE-bench / GPQA 这类各测什么）、Arena / Elo 排名、过拟合刷榜——跑分和真实体验的差距从哪来 | 🔍 |
-| 08 | 08-glossary-product.md | 产品黑话词：厂商发布会上的词，背后各是什么技术 | Thinking / Reasoning、Deep Research、Computer Use、Artifacts / Canvas、Copilot vs Agent、Grounding、Guardrails——剥掉营销壳，看它对应哪个技术能力 | 🔍 |
+| 04 ✅| 04-glossary-model-spec.md | 模型规格词：新模型发布公告里的参数都什么意思 | 7B/405B（参数量级）、Dense vs MoE（混合专家）、激活参数、蒸馏（Distillation）、量化（INT8/FP4）、开源权重 vs 闭源、Base 模型 vs Instruct 模型 | 🔍 |
+| 05 ✅| 05-glossary-training.md | 训练流程词：一个模型是怎么"炼"出来的 | 预训练（Pretraining）、后训练（Post-training）、SFT（监督微调）、RLHF / DPO（人类偏好对齐）、对齐（Alignment）、微调（Fine-tuning）、LoRA——用一条流水线把所有词串起来 | |
+| 06 ✅| 06-glossary-inference.md | 推理采样词：模型生成一个字的背后 | Logits、Temperature、Top-p / Top-k、贪心解码、Max tokens、Stop sequence、KV Cache、投机采样（Speculative Decoding）——为什么同一个问题每次答案不一样，从这组词里找答案 | |
+| 07 ✅| 07-glossary-eval.md | 能力评测词：跑分怎么看，为什么跑分高体感差 | Zero-shot / Few-shot、In-context Learning、涌现能力、Benchmark 怎么读（MMLU / SWE-bench / GPQA 这类各测什么）、Arena / Elo 排名、过拟合刷榜——跑分和真实体验的差距从哪来 | 🔍 |
+| 08 ✅| 08-glossary-product.md | 产品黑话词：厂商发布会上的词，背后各是什么技术 | Thinking / Reasoning、Deep Research、Computer Use、Artifacts / Canvas、Copilot vs Agent、Grounding、Guardrails——剥掉营销壳，看它对应哪个技术能力 | 🔍 |
 
 ---
 
