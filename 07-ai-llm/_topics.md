@@ -32,6 +32,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 1. 用户在 Mac 起：专用 Chrome（`--remote-debugging-port=9223 --user-data-dir=$HOME/.wxmp-chrome`）+ 反向隧道（`ssh -N -R 19222:127.0.0.1:9223 jiangqian.8@10.37.127.91`）
 2. 脚本：`~/.remote-browser/wxmp-publisher/wx-post.js`，`CDP_URL=http://127.0.0.1:19222 node wx-post.js --md <文件> --title <标题> --series ai --index <N> --save`（默认自动插投票，`--no-vote` 关闭；每跑一次都会在「投票管理」里真实创建一个投票，不带 `--save` 的试跑也会，别反复试）
 3. 分批发（每批 4 篇），发完看 BODY_FILL 的 len 确认正文非空（曾出现空稿 bug，已修），再看 VOTE 行 `ok:true` 确认投票插入成功
+4. 封面：`--series ai` 走 `gen-cover-ai.js`（小红书大字报风格，12 布局 × 12 配色按 `--index` 轮转，连续篇不重样）。标题按「主标：副标」拆分，主标里的英文/数字词（LLM、API、Token、1M）自动荧光笔高亮，不准就传 `--cover-kw`；想换样式传 `--cover-layout 0-11` / `--cover-palette 0-11`。发前预览：`node gen-cover-ai.js --title <标题> --index <N> --sheet <目录>`
 4. 博客同步（可选）：文章存 ECS mongo（`ssh -fN -L 27018:127.0.0.1:27017 myblog`，库 aimeeblog，集合 article），发「分享镜」分类
 
 **已发布的不回改**（标题发布后改不了，重发会重复）。仓库改动照常 commit + push。
