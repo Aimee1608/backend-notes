@@ -20,7 +20,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 
 **已群发：01–16**（第零章 + 第一章关键词扫盲 + 第二章调用基础 + 第三章 Context Engineering）。
 **时效性核查：2026-09-08 对 01–16 全量做过一轮**（模型代际、开源阵营、Arena 更名、思考模式改档位、采样参数下线、缓存折扣与 TTL、Batch/异步、preserved thinking、Benchmark 饱和、Computer Use 成熟度、结构化输出、Few-shot/CoT 实测结论），仓库文件已更新；公众号侧已发出的稿子不回改。下次发布前若隔了一个月以上，先把 🔍 篇目再核一遍。
-**已写未发布：17–20**（第四章「RAG 的 2026 定位」，2026-09-14 写完，18/19 的向量库选型格局与 Agentic Search 现状已联网核实）。
+**已发公众号草稿（待群发）：17–20**，2026-09-14 发的，带投票 + 封面 + 链路图。
 **下一篇：21**，从第五章「Agent」开始。
 
 **每篇必带「文末答题」**（互动栏目，从 01 开始已固化）：
@@ -35,6 +35,8 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 2. 脚本：`~/.remote-browser/wxmp-publisher/wx-post.js`，`CDP_URL=http://127.0.0.1:19222 node wx-post.js --md <文件> --title <标题> --series ai --index <N> --save`（默认自动插投票，`--no-vote` 关闭；每跑一次都会在「投票管理」里真实创建一个投票，不带 `--save` 的试跑也会，别反复试）
 3. 分批发（每批 4 篇），发完看 BODY_FILL 的 len 确认正文非空（曾出现空稿 bug，已修），再看 VOTE 行 `ok:true` 确认投票插入成功
 4. 发完打开草稿箱列表核对封面：偶发「上传成功但没选中确认」，草稿会没封面（09 遇到过一次）。修法是删草稿重发（`operate_appmsg?sub=del`，见 delete-drafts2.js），会多出一个孤儿投票，去投票管理删
+6. 正文里的 mermaid 图：转换器输出的是内联 SVG，公众号编辑器不收；`wx-post.js` 会自动换成 `img/<slug>-N.png` 的 data URI（没有就现渲染），贴入后公众号转存到自己图床，看 BODY_IMGS 数量确认。AI 系列封面不从正文取图，一律生成
+7. 公众号 2026-09 起贴入时会弹「内容结构检测」（行高偏小），脚本自动点「继续插入」（日志 STRUCTURE_CHECK），不影响排版
 5. 封面：`--series ai` 走 `gen-cover-ai.js`（小红书大字报风格，12 布局 × 12 配色按 `--index` 轮转，连续篇不重样）。标题按「主标：副标」拆分，主标里的英文/数字词（LLM、API、Token、1M）自动荧光笔高亮，不准就传 `--cover-kw`；想换样式传 `--cover-layout 0-11` / `--cover-palette 0-11`。发前预览：`node gen-cover-ai.js --title <标题> --index <N> --sheet <目录>`
 4. 博客同步（可选）：文章存 ECS mongo（`ssh -fN -L 27018:127.0.0.1:27017 myblog`，库 aimeeblog，集合 article），发「分享镜」分类
 
