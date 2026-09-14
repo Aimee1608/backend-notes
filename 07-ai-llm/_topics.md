@@ -7,6 +7,7 @@ RAG 是工程选择而不是必需品。不讲已被淘汰的老套路，讲清�
 发布合集：研发都要懂的事（公众号「Aimee写代码」）
 
 写作纪律：
+- **链路图用 mermaid 写在 md 里**，写完用 `node ~/.remote-browser/wxmp-publisher/render-mermaid.mjs <md> 07-ai-llm/img <slug>` 渲染成 PNG 进仓库给博客用；封面每章写完用 gen-cover-ai.js 渲染进 `07-ai-llm/covers/`。09/12/13/17/19/20 已补图（2026-09-14）
 - **纯知识点扫盲，不写 demo 代码**：讲概念、讲链路、讲决策，用文字和链路图说清楚，不放代码块（个别地方一小段 JSON 结构示意可以，但不写可运行代码）
 - 涉及具体模型参数 / 价格 / 生态现状的篇目，动笔前先 WebSearch 核实当前状态（标 🔍）
 - 原理性内容（token、采样、向量、agent loop）不依赖时效，直接写
